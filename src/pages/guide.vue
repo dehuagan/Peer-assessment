@@ -1,23 +1,24 @@
 <template>
-  <div id="header">
-    <h1>同伴评估系统</h1>
+  <div class="guide">
+    <h1>this is guide</h1>
+    
   </div>
 </template>
 
 <script>
 export default {
-  name: 'hello',
-  data () {
-    return {
-      msg: '啊啊啊啊 App'
-    }
-  }
+  // name: 'guide',
+  // data () {
+  //   return {
+  //     msg: 'this si guide'
+  //   }
+  // }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
-/*h1, h2 {
+<style scoped>
+h1, h2 {
   font-weight: normal;
 }
 
@@ -33,5 +34,5 @@ li {
 
 a {
   color: #42b983;
-}*/
+}
 </style>
