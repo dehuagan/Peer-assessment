@@ -2,14 +2,14 @@
 <div>
   
 
-  <div class="nav">
-    <ul>
-      <li> <img :src="homeurl"> </li>
-      <li>课程管理</li>
+  <div>
+    <ul class="nav nav-pills nav-stacked" style="border-right: 2px solid #000;">
+      <li><router-link to="/pages/index"><img :src="homenol"></router-link></li>
+      <li><router-link to="/pages/class-manage">课程管理</router-link></li>
       <li><router-link to="/pages/peerview-monitor">同评监控</router-link></li>
       <li><router-link to="/pages/guide">指导反馈</router-link></li>
-      <li>社区讨论</li>
-      <li>个人空间</li>
+      <li><router-link to="/pages/community">社区讨论</router-link></li>
+      <li><router-link to="/pages/person">个人空间</router-link></li>
     </ul>
     
   
@@ -20,10 +20,21 @@
 
 <script>
 import homepic from '@/assets/home.png'
+import homenol from '@/assets/home-nol.png'
 export default {
   data () {
     return {
-      homeurl: homepic
+      homeurl: homepic,
+      homenol: homenol,
+      iconhome: {
+        'background': homenol
+      }
+    }
+  },
+  methods: {
+    showActive: function (index) {
+      this.active = index
+      console.log('launch------#####')
     }
   }
 }
@@ -32,30 +43,57 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style type="text/css">
 
-.nav {
-  width: 100px;
+/*.nav {
+  width: 180px;
   border-left: 1px solid #000;
   border-right: 1px solid #000;
-}
-.nav ul {
+  border-bottom: 2px solid #000;
+  height: 400px;
+}*/
+/*.nav ul {
   margin: 0;
   padding-left: 0px;
+}*/
 
-/*  padding-top: 15px;
-*/  /*margin-right: 1000px;
-  border-right: 2px solid #000;
-  border-top: 2px solid #000;
-  border-right: 2px solid #000;
-  border-left: 2px solid #000;*/
+/*.icon-home {
+  background: url('/Users/gandehua/my-project/src/assets/home-nol.png');
+  background-size: 100% 100%;
 }
-
-.nav li {
+*/
+/*.router-link-active {
+  color: green;
+}
+*/
+/*.nav li {
   text-align: center;
   border-bottom: 2px solid #000;
   height: 40px;
 
 }
+li {
+  
+}
+.hide {
+  position: absolute;
+  bottom: 0;
+}*/
+a {
+  color: #42b983;
+}
+li {
+  border-bottom: 2px solid #000;
+}
 
+/*a:visited{
+  color: green;
+}*/
+/*a:hover{
+  color: green;
+}*/
+
+/*a:active {
+  color: green;
+}*/
 /*h1, h2 {
   font-weight: normal;
 }

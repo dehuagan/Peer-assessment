@@ -3,20 +3,9 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-// import VueResource from 'vue-resource'
-// import guide from './pages/guide'
-// import peerview from '@/pages/peerview-monitor'
-// import VueRouter from 'vue-router'
-import axios from 'axios'
-Vue.prototype.$http = axios
-// Vue.use(VueRouter)
-// Vue.config.productionTip = false
-
-// const routes = [
-// 	{path: '@/pages/guide', component: guide},
-// 	{path: '@/pages/peerview-monitor', component: peerview}
-// ]
-
+// import axios from 'axios'
+// Vue.prototype.$http = axios
+// Vue.use(axios)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

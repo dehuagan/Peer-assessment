@@ -9,20 +9,17 @@
     <div class="router-view">
       <router-view></router-view>
     </div>
-    
-    
-   <!--  <button @click="click()">click</button>
-    <h1 v-text="title"></h1>
-    <input v-model="newItem" @keyup.enter="add">
-    <ul>
-      <li v-for="item in items" v-bind:class="{finished:item.isFinished}" @click="change(item)">{{item.label}}</li>
-    </ul> -->
+    <div class="footer">
+      <footbar></footbar>
+    </div>
+   
   </div>
 </template>
 
 <script>
 import topbar from '@/components/topbar'
 import navigatior from '@/components/navigatior'
+import footbar from '@/components/footbar'
 // import guide from '@/pages/guide'
 import Store from './Store'
 console.log('aaa------', Store)
@@ -37,7 +34,8 @@ export default {
   },
   components: {
     'topbar': topbar,
-    'navigatior': navigatior
+    'navigatior': navigatior,
+    'footbar': footbar
   },
   watch: {
     items: {
@@ -81,14 +79,27 @@ export default {
 }
 
 .router-view {
-   width:350px;
+   
     float:left;
-    padding:10px; 
+    padding-right: 0px; 
+    text-align: center;
+    margin-top: 30px;
+    margin-left: 80px;
 }
 
 .nav {
   width: 100px;
   float: left;
+
+}
+
+.footer {
+  /*text-align: center;*/
+  margin-top: 600px;
+  clear:both;
+  height: 50px;
+  border: 2px solid #000
+
 }
 /*#app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;

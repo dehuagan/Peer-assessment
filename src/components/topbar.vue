@@ -1,6 +1,6 @@
 <template>
   <div class="topbar">
-    <h1 style="text-align: center;">同伴评估系统</h1>
+    <h1 style="text-align: center; font-size: 20px;">同伴评估系统</h1>
     
   </div>
 </template>
