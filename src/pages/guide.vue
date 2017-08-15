@@ -27,38 +27,42 @@
       </div>
      </div>
      <div class="btn-group" data-toggle="buttons" style="width: 300px; margin-top: 50px;">
-           <label class="btn btn-primary">
+           <label class="btn btn-success ">
         <input type="checkbox"> 班级
       </label>
-      <label class="btn btn-primary">
+      <label class="btn btn-success">
         <input type="checkbox"> 个人
       </label>
-      <label class="btn btn-primary">
+      <label class="btn btn-success ">
         <input type="checkbox"> 反馈
       </label>
      </div>
     </div>
     <div class="talk" style="float: left; margin-left: 60px; width: 600px;">
       <div class="panel panel-default">
-    <div class="panel-body" style="border-bottom: 1px solid #000;">
+    <div class="panel-body" style="border-bottom-style: groove;">
         教师公告
     </div>
     <div data-spy="scroll" data-target="#navbar-example" data-offset="0" 
-   style="height:300px;overflow:auto; position: relative; margin-top: 5px;">
-    <div class="container" style="padding: 100px 50px 10px;">{{order}}</div>
+   style="height:300px;overflow-x:hidden; position: relative;">
+    
+    <div class="panel-body panel panel-default" style="margin-left: 10px; margin-right: 10px;" v-for="order in orders">
+      <p class="text-justify">{{order}}</p>
+    </div>
+  
    </div>
-   <div class="col-lg-6" style="width: 614px;">
-        <div class="input-group">
-          <input type="text" class="form-control" v-model="msg">
+   <div class="col-lg-6" style="width: 600px;">
+        <div class="input-group" style="margin: 0px;">
+          <input type="text" class="form-control" v-model="msg" @keyup.enter="send()">
           <span class="input-group-btn">
             <button class="btn btn-default" type="button" @click="send()">
               发送
             </button>
           </span>
-        </div><!-- /input-group -->
+        <!-- /input-group -->
       </div><!-- /.col-lg-6 -->
 </div>
-
+</div>
     </div>
   </div>
 
@@ -69,13 +73,16 @@ export default {
   data () {
     return {
       msg: '',
-      order: ''
+      orders: []
     }
   },
   methods: {
     send: function () {
       console.log(this.msg)
-      this.order = this.msg
+      if (this.msg !== '') {
+        this.orders.push(this.msg)
+      }
+      this.msg = ''
     }
   }
 }
@@ -86,6 +93,8 @@ export default {
 label {
   width: 100px;
 }
-
+.btn-group {
+  background-color: green;
+}
 
 </style>

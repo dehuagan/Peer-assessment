@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+Vue.prototype.HOST = '/api'
 // import axios from 'axios'
 // Vue.prototype.$http = axios
 // Vue.use(axios)
@@ -13,3 +14,4 @@ new Vue({
   template: '<App/>',
   components: { App }
 })
+// router.go('/pages/index')

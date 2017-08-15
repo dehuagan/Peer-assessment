@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<p>this is community</p>
+		<p>this is class manage</p>
 	</div>
 </template>
 

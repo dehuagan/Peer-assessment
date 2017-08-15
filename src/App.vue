@@ -2,7 +2,7 @@
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
     <topbar></topbar>
-    <div class="nav">
+    <div class="appnav">
       
       <navigatior></navigatior>
     </div>
@@ -21,15 +21,10 @@ import topbar from '@/components/topbar'
 import navigatior from '@/components/navigatior'
 import footbar from '@/components/footbar'
 // import guide from '@/pages/guide'
-import Store from './Store'
-console.log('aaa------', Store)
 export default {
   name: 'app',
   data () {
     return {
-      title: 'ashfgahfa',
-      items: Store.fetch(),
-      newItem: ''
     }
   },
   components: {
@@ -37,11 +32,13 @@ export default {
     'navigatior': navigatior,
     'footbar': footbar
   },
+  created () {
+    // this.$router.push('/pages/index')
+  },
   watch: {
     items: {
     // 监测items的变化并作出响应
       handler: function (items) {
-        Store.save(items)
       },
       deep: true
     }
@@ -85,21 +82,30 @@ export default {
     text-align: center;
     margin-top: 30px;
     margin-left: 80px;
+
 }
 
-.nav {
+.appnav {
   width: 100px;
   float: left;
+  margin: 0;
+
 
 }
 
 .footer {
-  /*text-align: center;*/
-  margin-top: 600px;
-  clear:both;
-  height: 50px;
-  border: 2px solid #000
+  width: 1200px;
+  border-top: 2px solid #000;
+  margin-top: 670px;
+  padding-top: 0px;
+}
 
+#app {
+  width: 1200px;
+  height: 800px;
+  text-align: center;
+  margin: 0 auto;
+  border: 2px solid #000;
 }
 /*#app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
