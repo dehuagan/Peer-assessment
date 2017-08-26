@@ -12,7 +12,13 @@ import studentmanage from '@/pages/student-manage'
 import classresource from '@/pages/class-resource'
 import homework from '@/pages/homework'
 import excwork from '@/pages/exc-work'
+import createcourse from '@/pages/createCourse'
 import createhomework from '@/pages/createHomework'
+import setupgroup from '@/pages/setupGroup'
+import blank from '@/pages/blank'
+import fixcourse from '@/pages/fixCourse'
+import monitor from '@/pages/monitor'
+import grouplist from '@/pages/groupList'
 Vue.use(Router)
 
 export default new Router({
@@ -73,9 +79,39 @@ export default new Router({
       component: classdetail
     },
     {
-      path: '/pages/createHomework/:id',
+      path: '/pages/createCourse',
+      name: 'createcourse',
+      component: createcourse
+    },
+    {
+      path: '/pages/fixCourse',
+      name: 'fixcourse',
+      component: fixcourse
+    },
+    {
+      path: '/pages/createHomework/:id/:class_id',
       name: 'createhomework',
       component: createhomework
+    },
+    {
+      path: '/pages/setupGroup/:id',
+      name: 'setupgroup',
+      component: setupgroup
+    },
+    {
+      path: '/pages/blank',
+      name: 'blank',
+      component: blank
+    },
+    {
+      path: '/pages/monitor/:course_id/:class_id/:id',
+      name: 'monitor',
+      component: monitor
+    },
+    {
+      path: '/pages/groupList/:id',
+      name: 'grouplist',
+      component: grouplist
     }
   ]
 })

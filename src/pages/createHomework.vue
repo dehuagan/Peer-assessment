@@ -1,62 +1,64 @@
 <template>
 <div>
-<div style="margin-right: 800px; float: left;">
+<div style="margin-right: 700px;">
 	<ol class="breadcrumb">
-    <li><router-link to="/pages/class-manage">课程管理</router-link></li>
-    <li class="active">创建课程</li>
+    <li><router-link :to="'/pages/classDetail/'+course_id">{{course}}</router-link></li>
+    <li><router-link :to="'/pages/homework/'+course_id">课程作业</router-link></li>
+    <li class="active">创建作业</li>
 </ol>
 </div>
-<div class="text-right" style="float: left;"><img :src="backPic" onclick="window.history.go(-1)"></div>
-<div style="width: 900px;">
-	<h3 style="text-align: center;">课程简介</h3>
-	<div style="width: 400px; float: left;">
-		<p class="text-left" style="float: left;">课程名: </p> <input style="margin-right: 35px; margin-left: 10px; width: 200px;float: left;" v-model="course.name">
+<div style="border: 1px solid; height: 500px;">
+	<div style="margin-top: 10px; margin-left: 10px;">
+		<p class="text-left" style="float: left;">作业标题: </p> <input style="margin-right: 35px; margin-left: 10px; width: 200px;float: left;" v-model="homework.name">
 	</div>
-	
+	<br><br>
+	<div style="width: 800px;  margin-left: 10px;" >
+		<p class="text-left" style="float: left;">作业要求: </p> <textarea v-model="homework.requirement" style="margin-left: 0px;margin-right: 220px;width: 500px;"></textarea>
+	</div>
+
 	<div>
-		<p class="text-left" style="float: left;">面向年级: </p> <input style="margin-right: 35px; margin-left: 10px; width: 100px;float: left;" v-model="course.grade"placeholder="例如15级">
-	</div>
-<br><br><br>
-	<div style="width: 800px;  margin-left: 0px;" >
-		<p class="text-left" style="float: left;">课程介绍: </p> <textarea v-model="course.description" style="margin-left: 0px;margin-right: 220px;width: 500px;"></textarea>
-	</div>
-<br>
-	<div style="float: left;">
-	<p class="text-left" style="float: left;">课程时长: </p> <input type="number" v-model="course.hours" style="margin-right: 35px; margin-left: 10px; width: 100px;float: left;">
-	</div>
-	<div style="float: left;">
-		<p class="text-left" style="float: left;">开课时间段: </p><input v-model="course.startday" style="width: 130px; float: left;" placeholder="年/月/日">&nbsp---<input v-model="course.endday" style="width: 130px; margin-left: 10px;" placeholder="年/月/日">
+		<p class="text-left" style="float: left; margin-left: 10px;">作业提交截止时间: </p><input v-model="homework.submit_ddl" style="width: 130px; float: left; margin-left: 10px;">
     
 	</div>
 	<br><br>
-		<div style="float: left;">
-			<p class="text-left" style="float: left;">上课班级: </p><input v-model="course.classes[0]" style="width: 130px; margin-left: 10px;">
-		</div>
-		<div style="float: left;" v-for="number in sum">
-			&nbsp&nbsp<input v-model="course.classes[number]" style="width: 130px;">
+	<div><p class="text-left" style="margin-left: 10px; float: left;">是否需要同伴评估:</p><input style="float: left; margin-left: 10px; " type="radio" id="one" value="One" v-model="picked"><label style="float: left; margin-left: 10px;" for="one">需要</label></p><input style="float: left; margin-left: 50px;" type="radio" id="two" value="Two" v-model="picked"><label style="float: left; margin-left: 10px;" for="two">不需要</label></div>
+	<br><br>
+	<div v-if="picked === 'One'">
+	<div style="margin-left: 10px;" >
+		<p class="text-left" style="float: left;">同伴互评准则: </p> <textarea v-model="homework.requirement" style="margin-left: 0px;margin-right: 250px;width: 500px; height: 100px;"></textarea>
+	</div>
+	<br>
+	<div style="float: left;"><p class="text-left" style="margin-left: 10px;">同伴互评的评估维度:</p></div>
+	<div style="float: left;" v-for="number in sum">
+			&nbsp&nbsp<input v-model="homework.standard[number]" style="width: 130px;">
 		</div>
 		<div style="margin-left: 0px;width: 90px; float: left;"><img :src="addPic" @click="addSum()">&nbsp<img :src="delPic" @click="delSum()">
 		</div>
-		<br><br><br>
-		<div class="text-left">
-			<p class="text-left" style="float: left;">先修课程: </p><input v-model="course.precourseName" style="width: 300px; margin-left: 10px; float: left;" placeholder="只需填写一个最相关的先修课程即可">
-		</div>
-		<br><br><br>
-		<div style="width: 800px;  margin-left: 0px;" >
-		<p class="text-left" style="float: left;">教学目标: </p> <textarea style="margin-left: 0px;margin-right: 220px;width: 500px;" v-model="course.aims"></textarea>
+		<br><br>
+			<div>
+		<form role="form">
+	<div class="form-group">
+		<label for="name" style="float: left; margin-left: 10px;">评估参考范例(要求：上传文件必须为.txt文件):</label>
 	</div>
-	<br>
+	<div class="form-group">
+<!--   <label class="sr-only" for="inputfile">文件输入</label> -->
+  <input style="margin-left: 10px;" type="file" id="inputfile">
+ </div>
+	</form>
+	
+	</div>
+
 	<div>
-	<p class="text-left" style="float: left;">教学进度表: </p>
-	<div class="form-group" style="margin-left: 10px;">
-  <label class="sr-only" for="inputfile">文件输入</label>
-  <input type="file" id="inputfile">
- </div>
- </div>
- <br><br><br>
- <div><button style="width: 200px;" type="button" class="btn btn-default" @click="saveCourse()">保存</button></div>
+		<p class="text-left" style="float: left; margin-left: 10px;">同评截至时间: </p><input v-model="homework.assessment_ddl" style="width: 130px; float: left; margin-left: 10px;">
+    
+	</div>
+	<div>
+		<p class="text-left" style="float: left; margin-left: 10px;">修改截至时间: </p><input v-model="homework.modify_ddl" style="width: 130px; float: left; margin-left: 10px;">
+    
 	</div>
 </div>
+</div>
+<div style="margin-top: 10px;"><button style="width: 200px;" type="button" class="btn btn-default" @click="saveHomework()">保存</button>&nbsp&nbsp&nbsp&nbsp&nbsp<button style="width: 200px;" type="button" class="btn btn-default" @click="launchHomework()">发布</button></div>
 
 </div>
 </template>
@@ -64,65 +66,122 @@
 <script type="text/javascript">
 import addPic from '@/assets/add.png'
 import delPic from '@/assets/del.png'
-import backPic from '@/assets/Back.png'
+import axios from 'axios'
 import store from '@/store.js'
 export default {
   data () {
     return {
-      sum: 0,
-      id: this.$route.params.id,
+      course_id: this.$route.params.id,
+      class_id: this.$route.params.class_id,
+      course: '',
       addPic: addPic,
       delPic: delPic,
-      backPic: backPic,
-      course: {
+      sum: 0,
+      picked: '',
+      homework: {
         name: '',
-        grade: '',
-        description: '',
-        hours: '',
-        startday: '',
-        endday: '',
-        classes: [],
-        precourseName: '',
-        aims: '',
-        state: '1'
+        submit_ddl: '',
+        assessment_ddl: '',
+        modify_ddl: '',
+        standard: [],
+        requirement: ''
       }
     }
   },
   methods: {
+    saveHomework: function () {
+      store.save('homeworkElement', this.homework)
+      alert('保存成功')
+    },
     addSum: function () {
       this.sum ++
     },
     delSum: function () {
       this.sum --
     },
-    saveCourse: function () {
-      store.save(this.course)
-      this.$router.go('/pages/class-manage')
+    launchHomework: function () {
+      let self = this
+      axios({
+        url: 'https://diningx.cn/pa/public/api/teacher/add_homework',
+        method: 'post',
+        data: {
+          type: 'T3001',
+          token: '1f5be77b086bc671b321a66ae4675330',
+          name: self.homework.name,
+          course_id: self.course_id,
+          class_id: self.class_id,
+          submit_ddl: self.homework.submit_ddl,
+          assessment_ddl: self.homework.assessment_ddl,
+          modify_ddl: self.homework.modify_ddl,
+          standard: self.homework.standard,
+          requirement: self.homework.requirement
+        },
+        transformRequest: [function (data) {
+    // Do whatever you want to transform the data
+          let ret = ''
+          for (let it in data) {
+            if (Object.prototype.toString.apply(data[it]) === '[object Array]') {
+              for (let item in data[it]) {
+                ret += encodeURIComponent(it) + '[]=' + encodeURIComponent(data[it][item]) + '&'
+              }
+            } else {
+              ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+            }
+          }
+          return ret
+        }],
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).then(function (res) {
+        console.log(res.data)
+        alert('发布成功')
+        self.$router.push({path: '/pages/homework/' + self.course_id})
+        store.delete('homeworkElement')
+      }).catch(function (err) {
+        console.log(err)
+      })
     },
-    getStoreData: function () {
-      return (store.fetch())
-    },
-    judge: function () {
-      if (this.id === '0') {
-        console.log('id------->', this.id)
-        this.course = this.getStoreData()
-        console.log(this.getStoreData())
-        console.log(this.course)
-      } else {
-        console.log('创建新的------->', this.id)
-      }
+    getCourseData: function () {
+      let self = this
+      axios({
+        url: 'https://diningx.cn/pa/public/api/student/get_course_info_by_id',
+        method: 'post',
+        data: {
+          type: 'S2003',
+          token: '1f5be77b086bc671b321a66ae4675330',
+          course_id: self.course_id
+        },
+        transformRequest: [function (data) {
+    // Do whatever you want to transform the data
+          let ret = ''
+          for (let it in data) {
+            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+          }
+          return ret
+        }],
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).then(function (res) {
+        self.course = res.data.msg.name
+        console.log(self.classes)
+      }).catch(function (err) {
+        console.log(err)
+      })
     }
   },
   created () {
-    this.judge()
+    this.getCourseData()
+    console.log('class_id----------->', this.class_id)
+    this.homework = store.fetch('homeworkElement')
   }
 }
 </script>
-
 <style type="text/css">
 .breadcrumb > li + li:before {
     color: #000;
     content: ">";
     padding: 0 5px;
-}
+}	
 </style>

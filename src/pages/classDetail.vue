@@ -18,7 +18,7 @@
   <li><h4 class="text-left">课程介绍: <small>{{items.description}}</small></h4></li>
   <li><h4 class="text-left">课程时长: <small>{{items.total_hours}}</small></h4></li>
   <li><h4 class="text-left">开课时间段: <small>{{items.start_day}}---{{ items.end_day }}</small></h4></li>
-  <li><h4 class="text-left">先修课程: <small v-for="aclass in classes">{{aclass.class_name}}&nbsp&nbsp</small></h4></li>
+  <li><h4 class="text-left">先修课程: <small>{{items.pre_course_name}}</small></h4></li>
   <li><h4 class="text-left">教学目标: <small>{{items.aim}}</small></h4></li>
   </ul>
   </div>
@@ -42,7 +42,7 @@ export default {
         method: 'post',
         data: {
           type: 'S2003',
-          token: 'fecf5b523f9e5f7c6fc6923f653edddc',
+          token: '1f5be77b086bc671b321a66ae4675330',
           course_id: self.course_id
         },
         transformRequest: [function (data) {

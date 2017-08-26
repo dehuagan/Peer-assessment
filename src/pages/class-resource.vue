@@ -1,10 +1,6 @@
 <template>
 <div>
-<div class="panel panel-default" style="width: 60px; height: 25px;">
-    <!-- <div class="panel-body" style="width: 60px;"> -->
-        <router-link to="/pages/peerview-monitor">返回</router-link>
-    <!-- </div> -->
-</div>
+  <router-link to="/pages/class-manage" class="btn btn-default" style="margin-right: 900px; margin-bottom: 10px;">返回</router-link>
 	<div>
 	<ul class="nav nav-tabs">
 	<li><router-link :to="'/pages/classDetail/'+course_id">课程大纲</router-link></li>

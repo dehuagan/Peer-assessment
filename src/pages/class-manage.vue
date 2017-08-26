@@ -1,10 +1,12 @@
 <template>
 <div>
- <div data-spy="scroll" data-target="#navbar-example" data-offset="0" 
-   style="overflow-x:hidden; position: relative;">
+ <div>
 	<div style="width: 950px;">
+	<h4>我的开设课程</h4>
+	<div data-spy="scroll" data-target="#navbar-example" data-offset="0" 
+   style="overflow-x:hidden; position: relative; height: 450px;">
 	 <table class="table table-bordered">
-		<caption style="text-align: center;"><h4>我的开设课程</h4></caption>
+		
 		<thead>
 			<tr>
 				<th>课程名</th>
@@ -27,14 +29,15 @@
 			<td>{{notLauCourses.grade}}</td>
 			<td>{{notLauCourses.state}}</td>
 			<td>{{ notLauCourses.startday }}</td>
-			<td><router-link :to="'/pages/createHomework/'+fixid" class="btn btn-warning">修改</router-link> &nbsp&nbsp&nbsp<button type="button" class="btn btn-success" @click="launch()">发布</button> &nbsp&nbsp&nbsp<button type="button" class="btn btn-danger" @click="delprecourse()">删除</button></td>
+			<td><router-link to="/pages/fixCourse" class="btn btn-warning">修改</router-link> &nbsp&nbsp&nbsp<button type="button" class="btn btn-success" @click="launch()">发布</button> &nbsp&nbsp&nbsp<button type="button" class="btn btn-danger" @click="delprecourse()">删除</button></td>
 		</tr>
 		</tbody>
-		</table>
+		</table></div>
 	</div>
 	</div>
+	<br><br><br>
 	<div v-if="notLauCourses ==''">
-	<router-link :to="'/pages/createHomework/'+creid" class="btn btn-default" style="width: 300px;">创建课程</router-link>
+	<router-link to="/pages/createCourse" class="btn btn-default" style="width: 300px;">创建课程</router-link>
 	</div>
 	<div v-else>
 		 <button type="button" style="width: 300px;" class="btn btn-default btn-lg" disabled="disabled">创建课程</button>
@@ -50,8 +53,8 @@ export default {
   data () {
     return {
       courses: [],
-      fixid: 0,
-      creid: 1,
+      // fixid: 0,
+      // creid: 1,
       notLauCourses: {},
       newClass: []
     }
@@ -61,7 +64,7 @@ export default {
       this.courses.splice(index, 1)
     },
     delprecourse: function () {
-      store.delete()
+      store.delete('courseElement')
       this.notLauCourses = ''
     },
     launch: function () {
@@ -104,11 +107,12 @@ export default {
         }
       }).then(function (res) {
         console.log(res.data)
+        self.delprecourse()
+        alert('发布成功')
+        self.$router.replace({path: '/pages/blank'})
       }).catch(function (err) {
         console.log(err)
       })
-      self.delprecourse()
-      this.$route.go(0)
     },
     getAllCourse: function () {
       let self = this
@@ -143,7 +147,7 @@ export default {
       // var items = store.fetch()
       // self.notLauCourses = items
       // console.log(self.notLauCourses)
-      return store.fetch()
+      return store.fetch('courseElement')
     }
   },
   created () {

@@ -1,9 +1,6 @@
 <template>
 <div>
-
-    <div style="margin-right: 950px;">
-        <router-link to="/pages/peerview-monitor" class="btn btn-default">返回</router-link>
-   </div>
+	<router-link to="/pages/class-manage" class="btn btn-default" style="margin-right: 900px; margin-bottom: 10px;">返回</router-link>
 
 	<div>
 	<ul class="nav nav-tabs">
@@ -14,6 +11,7 @@
 	<li><router-link :to="'/pages/exc-work/'+course_id">优秀作品榜</router-link></li>
 	</ul>
   </div>
+  <!-- 分割 ************************************************************************-->
    <h3>{{ items.name }}作业列表</h3>
 	<div data-spy="scroll" data-target="#navbar-example" data-offset="0" 
    style="height:400px;overflow-x:hidden; position: relative;">
@@ -21,13 +19,34 @@
 	<div class="panel-heading">
 		<h3 class="panel-title" style="height: 30px;">
 			{{aclass.class_name}}
-			<router-link :to="'/pages/createHomework/'+course_id" class="btn btn-default text-right" style="float: right;">创建作业</router-link>
+			<router-link :to="'/pages/createHomework/'+course_id +'/' + aclass.class_id" class="btn btn-default text-right" style="float: right;">创建作业</router-link>
 		</h3>
 		
 	</div>
 	<div class="panel-body">
 		<div data-spy="scroll" data-target="#navbar-example" data-offset="0" 
-   style="height:300px;overflow:auto; position: relative;"></div>
+   style="height:300px;overflow:auto; position: relative;">
+   	<table class="table table-bordered">
+		<thead>
+		<tr>
+			<th>作业标题</th>
+			<th>截至时间</th>
+			<th>轮次</th>
+			<th>作业状态</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody>
+	<tr v-for="(homework, index) in aclass.homeworks">
+		<td>{{homework.name}}</td>
+		<td>{{homework.submit_ddl}}</td>
+		<td>{{homework.round}}</td>
+		<td>{{homework.state}}</td>
+		<td><button>查看</button>&nbsp&nbsp<button>删除</button></td>
+	</tr>
+	</tbody>
+	</table>
+   </div>
 	</div>
 </div>
 	</div>
@@ -47,11 +66,11 @@ export default {
     getData: function () {
       let self = this
       axios({
-        url: 'https://diningx.cn/pa/public/api/student/get_course_info_by_id',
+        url: 'https://diningx.cn/pa/public/api/teacher/get_homework_of_course',
         method: 'post',
         data: {
-          type: 'S2003',
-          token: 'fecf5b523f9e5f7c6fc6923f653edddc',
+          type: 'T3003',
+          token: '1f5be77b086bc671b321a66ae4675330',
           course_id: self.course_id
         },
         transformRequest: [function (data) {
@@ -66,12 +85,9 @@ export default {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       }).then(function (res) {
-        console.log(self.course_id)
-        console.log(res.data.msg)
-        self.items = res.data.msg
-        self.classes = self.items.classes
+        console.log(res.data.msg[0].name + 'T2003-----' + res.data.msg.length)
+        self.classes = res.data.msg
         console.log(self.classes)
-        // console.log('------------->', self.items)
       }).catch(function (err) {
         console.log(err)
       })
@@ -84,5 +100,7 @@ export default {
 </script>
 
 <style type="text/css">
-	
+th {
+	text-align: center;
+}	
 </style>

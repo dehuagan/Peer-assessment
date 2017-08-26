@@ -1,9 +1,11 @@
 <template>
-  <div>
-    <div class="list" style="width: 300px; height: 350px; float: left;">
+ <div>
+
+    <div class="list" style="width: 300px; height: 400px; float: left;">
     <div data-spy="scroll" data-target="#navbar-example" data-offset="0" 
-   style="height:300px;overflow:auto; position: relative;">
+   style="height:350px;overflow:auto; position: relative;">
       <div class="panel-group" id="accordion">
+      <div v-if="picked === 1">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h4 class="panel-title">
@@ -23,25 +25,65 @@
               <li class="list-group-item">小组1</li>
             </ul>
           </div>
+        </div></div>
+          <div class="panel panel-default" v-if="picked === 2">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" 
+               href="#collapseOne">
+              个人
+            </a>
+          </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse">
+          
+            <ul class="list-group">
+              <li class="list-group-item">小组1</li>
+              <li class="list-group-item">小组1</li>
+              <li class="list-group-item">小组1</li>
+              <li class="list-group-item">小组1</li>
+              <li class="list-group-item">小组1</li>
+            </ul>
+          </div>
+        </div>
+              <div class="panel panel-default" v-if="picked === 3">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" 
+               href="#collapseOne">
+              反馈
+            </a>
+          </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse">
+          
+            <ul class="list-group">
+              <li class="list-group-item">小组1</li>
+              <li class="list-group-item">小组1</li>
+              <li class="list-group-item">小组1</li>
+              <li class="list-group-item">小组1</li>
+              <li class="list-group-item">小组1</li>
+            </ul>
+          </div>
         </div>
       </div>
      </div>
-     <div class="btn-group" data-toggle="buttons" style="width: 300px; margin-top: 50px;">
-           <label class="btn btn-success ">
-        <input type="checkbox"> 班级
-      </label>
-      <label class="btn btn-success">
-        <input type="checkbox"> 个人
-      </label>
-      <label class="btn btn-success ">
-        <input type="checkbox"> 反馈
-      </label>
-     </div>
-    </div>
+   <div class="btn-group" data-toggle="buttons">
+  <label class="btn" for="option1">
+    <a style="display: block;" id="option1" @click="change(1)">班级</a>
+  </label>
+  <label class="btn " for="option2" >
+    <a @click="change(2)">个人</a>
+  </label>
+  <label class="btn" for="option3">
+    <a @click="change(3)">反馈</a>
+  </label>
+</div>  
+    </div> 
     <div class="talk" style="float: left; margin-left: 60px; width: 600px;">
       <div class="panel panel-default">
     <div class="panel-body" style="border-bottom-style: groove;">
-        教师公告
+        教师公告{{picked}}
     </div>
     <div data-spy="scroll" data-target="#navbar-example" data-offset="0" 
    style="height:300px;overflow-x:hidden; position: relative;">
@@ -51,17 +93,7 @@
     </div>
   
    </div>
-   <div class="col-lg-6" style="width: 600px;">
-        <div class="input-group" style="margin: 0px;">
-          <input type="text" class="form-control" v-model="msg" @keyup.enter="send()">
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="button" @click="send()">
-              发送
-            </button>
-          </span>
-        <!-- /input-group -->
-      </div><!-- /.col-lg-6 -->
-</div>
+   <talktext></talktext>
 </div>
     </div>
   </div>
@@ -69,14 +101,20 @@
 </template>
 
 <script>
+import talktext from '@/components/talk-text'
+import talkmessage from '@/components/talk-message'
 export default {
   data () {
     return {
       msg: '',
-      orders: []
+      orders: [],
+      picked: ''
     }
   },
   methods: {
+    change: function (tab) {
+      this.picked = tab
+    },
     send: function () {
       console.log(this.msg)
       if (this.msg !== '') {
@@ -84,6 +122,10 @@ export default {
       }
       this.msg = ''
     }
+  },
+  components: {
+    'talktext': talktext,
+    'talkmessage': talkmessage
   }
 }
 </script>
@@ -96,5 +138,7 @@ label {
 .btn-group {
   background-color: green;
 }
-
+a {
+  display: block;
+}
 </style>
