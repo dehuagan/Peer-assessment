@@ -1,9 +1,9 @@
 <template>
   <div id="peer">
-  <div style="width: 1000px; height: 130px;">
-    <div class="classnav table-responsive">
+  
+<!--     <div class="classnav table-responsive"> -->
      
-    	<ul id="myTab" class="nav nav-tabs">
+    	<ul class="nav nav-pills">
       <li :class="{'active': index == 0}" v-for="(item,index) in items">
       <a href="" data-toggle="tab" @click="changeTab(item.id)">
        {{item.name}} </a>
@@ -12,13 +12,13 @@
 </ul>
 
   
-    </div>
-    </div>
+   <!--  </div> -->
    
-  <!--************************************************************************** -->
-   <div style="margin-top: 0px;">
+   
+  <!-- ************************************************************************** -->
+   <div style="margin-top: 10px;">
   <div data-spy="scroll" data-target="#navbar-example" data-offset="0" 
-   style="height:400px;overflow-x:hidden; position: relative;">
+   style="height:500px;overflow-x:hidden; position: relative;">
   <div v-for="aclass in classes" class="panel panel-default" style="width: 1000px;">
   <div class="panel-heading">
     <h3 class="panel-title">
@@ -26,7 +26,6 @@
     </h3>
     
   </div>
-  <div class="panel-body">
     <div data-spy="scroll" data-target="#navbar-example" data-offset="0" 
    style="height:300px;overflow:auto; position: relative;">
     <table class="table table-bordered">
@@ -49,13 +48,13 @@
     <td>{{homework.state}}</td>
     <td>{{homework.submit_num}}</td>
     <td>{{homework.avg_score}}</td>
-    <td><router-link class="btn btn-success" :to="'/pages/monitor/'+homework.course_id+'/'+homework.class_id+'/'+homework.id">监控</router-link></td>
+    <td><button class="btn btn-success" @click="showDeatail( homework.course_id,  homework.class_id, homework.id, homework.name)">监控</button></td>
   </tr>
   </tbody>
   </table>
    </div>
    </div>
-</div>
+
 </div>
 </div>
   </div>
@@ -63,14 +62,25 @@
 
 <script type="text/javascript">
 import axios from 'axios'
+import store from '@/store.js'
 export default {
   data () {
     return {
       items: [],
-      classes: []
+      classes: [],
+      storeData: []
     }
   },
   methods: {
+    showDeatail: function (courseid, classid, id, name) {
+      console.log('class_name&id------->', classid, id)
+      this.storeData.push(courseid)
+      this.storeData.push(classid)
+      this.storeData.push(name)
+      store.save('storeData', this.storeData)
+      this.storeData = []
+      this.$router.push('/pages/monitor/' + id)
+    },
     getHomeworkData: function (id) {
       let self = this
       axios({
@@ -142,5 +152,9 @@ export default {
 <style type="text/css">
 a.router-link-active {
   background-color: #ccc;
+}
+
+th {
+  text-align: center;
 }
 </style>

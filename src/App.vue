@@ -9,7 +9,7 @@
     <div class="router-view">
       <router-view></router-view>
     </div>
-    <div class="footer">
+    <div class="foobar">
       <footbar></footbar>
     </div>
    
@@ -78,34 +78,33 @@ export default {
 .router-view {
    
     float:left;
-    padding-right: 0px; 
     text-align: center;
     margin-top: 30px;
-    margin-left: 80px;
+    margin-left: 30px;
+    height: 600px;
+    width: 1000px;
 
 }
 
 .appnav {
-  width: 100px;
+  width: 200px;
   float: left;
   margin: 0;
 
 
 }
 
-.footer {
-  width: 1200px;
-  border-top: 2px solid #000;
-  margin-top: 670px;
-  padding-top: 0px;
+.footbar {
+/*  width: 1200px;*/
+  margin-top: 56%;
+
 }
 
 #app {
-  width: 1200px;
+ /* width: 1200px;*/
   height: 800px;
   text-align: center;
   margin: 0 auto;
-  border: 2px solid #000;
 }
 /*#app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;

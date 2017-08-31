@@ -173,7 +173,7 @@ export default {
     },
     getFile: function (event) {
       this.file = event.target.files[0]
-      console.log(this.file)
+      console.log('file--------------->', this.file)
       console.log('picked---------->', this.picked)
     },
     getGroupData: function (id) {
@@ -218,26 +218,26 @@ export default {
     upload: function (grouptype, id, event) {
       event.preventDefault()
       let self = this
+      let formData = new FormData()
+      formData.append('groupingtype', grouptype)
+      formData.append('class_id', id)
+      formData.append('type', 'T2004')
+      formData.append('token', '1f5be77b086bc671b321a66ae4675330')
+      formData.append('file', self.file)
       axios({
         url: 'https://diningx.cn/pa/public/api/teacher/grouping',
         method: 'post',
-        data: {
-          groupingtype: grouptype,
-          class_id: id,
-          type: 'T2004',
-          token: '1f5be77b086bc671b321a66ae4675330',
-          _FILES: self.file
-        },
-        transformRequest: [function (data) {
-    // Do whatever you want to transform the data
-          let ret = ''
-          for (let it in data) {
-            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-          }
-          return ret
-        }],
+        data: formData,
+    //     transformRequest: [function (data) {
+    // // Do whatever you want to transform the data
+    //       let ret = ''
+    //       for (let it in data) {
+    //         ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+    //       }
+    //       return ret
+    //     }],
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'multipart/form-data'
         }
       }).then(function (res) {
         // console.log(res.data.msg[0].name + 'T2003-----' + res.data.msg.length)

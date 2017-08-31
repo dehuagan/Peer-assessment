@@ -104,7 +104,7 @@ export default new Router({
       component: blank
     },
     {
-      path: '/pages/monitor/:course_id/:class_id/:id',
+      path: '/pages/monitor/:homework_id',
       name: 'monitor',
       component: monitor
     },
