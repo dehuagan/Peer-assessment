@@ -1,14 +1,10 @@
 <template>
 <div>
-<div style="margin-right: 800px; float: left;">
-	<ol class="breadcrumb">
-    <li><router-link to="/pages/class-manage">课程管理</router-link></li>
-    <li class="active">修改课程</li>
-</ol>
-</div>
-<div class="text-right" style="float: left;"><img :src="backPic" onclick="window.history.go(-1)"></div>
-<div style="width: 900px;">
-	<h3 style="text-align: center;">课程简介</h3>
+
+<div style="width: 100%;">
+<div>
+	<h3 style="text-align: center;">创建课程</h3>
+  <div style="margin-top: 10px;">
 	<div style="width: 400px; float: left;">
 		<p class="text-left" style="float: left;">课程名: </p> <input style="margin-right: 35px; margin-left: 10px; width: 200px;float: left;" v-model="course.name">
 	</div>
@@ -17,7 +13,7 @@
 		<p class="text-left" style="float: left;">面向年级: </p> <input style="margin-right: 35px; margin-left: 10px; width: 100px;float: left;" v-model="course.grade"placeholder="例如15级">
 	</div>
 <br><br><br>
-	<div style="width: 800px;  margin-left: 0px;" >
+	<div style="width: 800px;" >
 		<p class="text-left" style="float: left;">课程介绍: </p> <textarea v-model="course.description" style="margin-left: 0px;margin-right: 220px;width: 500px;"></textarea>
 	</div>
 <br>
@@ -57,23 +53,25 @@
  <div><button style="width: 200px;" type="button" class="btn btn-default" @click="saveCourse()">保存</button></div>
 	</div>
 </div>
-
+</div>
+</div>
 </div>
 </template>
 
 <script type="text/javascript">
+import topbar from '@/components/topbar'
+import navigatior from '@/components/navigatior'
 import addPic from '@/assets/add.png'
 import delPic from '@/assets/del.png'
-import backPic from '@/assets/Back.png'
 import store from '@/store.js'
 export default {
   data () {
     return {
       sum: 0,
+      user: {},
       id: this.$route.params.id,
       addPic: addPic,
       delPic: delPic,
-      backPic: backPic,
       course: {
         name: '',
         grade: '',
@@ -88,6 +86,9 @@ export default {
       }
     }
   },
+  components: {
+    topbar, navigatior
+  },
   methods: {
     addSum: function () {
       this.sum ++
@@ -97,7 +98,7 @@ export default {
     },
     saveCourse: function () {
       store.save('courseElement', this.course)
-      this.$router.push({path: '/pages/class-manage'})
+      this.$router.go(0)
     },
     getStoreData: function () {
       return (store.fetch('courseElement'))
@@ -105,8 +106,8 @@ export default {
   },
   created () {
     // this.judge
-    console.log('%%%%%------->fixCourse')
-    this.course = store.fetch('courseElement')
+    console.log('%%%%%------->createCourse')
+    this.user = store.fetch('user')
   }
 }
 </script>

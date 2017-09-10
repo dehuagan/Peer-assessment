@@ -1,6 +1,12 @@
 <template>
  <div>
-
+  <div>
+    <topbar :user="user"></topbar>
+    <div class="appnav">
+      
+      <navigatior></navigatior>
+      </div>
+      </div>
     <div class="list" style="width: 300px; height: 400px; float: left;">
     <div data-spy="scroll" data-target="#navbar-example" data-offset="0" 
    style="height:350px;overflow:auto; position: relative;">
@@ -103,12 +109,16 @@
 <script>
 import talktext from '@/components/talk-text'
 import talkmessage from '@/components/talk-message'
+import topbar from '@/components/topbar'
+import navigatior from '@/components/navigatior'
+import store from '@/store.js'
 export default {
   data () {
     return {
       msg: '',
       orders: [],
-      picked: ''
+      picked: '',
+      user: {}
     }
   },
   methods: {
@@ -124,8 +134,10 @@ export default {
     }
   },
   components: {
-    'talktext': talktext,
-    'talkmessage': talkmessage
+    talktext, talkmessage, topbar, navigatior
+  },
+  created () {
+    this.user = store.fetch('user')
   }
 }
 </script>

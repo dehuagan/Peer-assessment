@@ -1,15 +1,5 @@
 <template>
 <div>
-	<router-link to="/pages/class-manage" class="btn btn-default" style="height: 35px; margin-right: 900px; margin-bottom: 10px;">返回</router-link>
-	<div>
-	<ul class="nav nav-tabs">
-	<li><router-link :to="'/pages/classDetail/'+course_id">课程大纲</router-link></li>
-	<li class="active"><router-link :to="'/pages/student-manage/'+course_id">学生管理</router-link></li>
-	<li><router-link :to="'/pages/class-resource/'+course_id">课程资源</router-link></li>
-	<li><router-link :to="'/pages/homework/'+course_id">课程作业</router-link></li>
-	<li><router-link :to="'/pages/exc-work/'+course_id">优秀作品榜</router-link></li>
-	</ul>
-  </div>
   <div class="progress">
 	<div class="progress-bar progress-bar-success" role="progressbar"
 		 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
@@ -70,7 +60,6 @@ import store from '@/store.js'
 export default {
   data () {
     return {
-      course_id: this.$route.params.id,
       groupData: []
     }
   },

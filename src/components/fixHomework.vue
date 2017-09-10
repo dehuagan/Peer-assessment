@@ -1,12 +1,6 @@
 <template>
 <div>
-<div style="margin-right: 700px;">
-	<ol class="breadcrumb">
-    <li><router-link :to="'/pages/classDetail/'+course_id">{{course}}</router-link></li>
-    <li><router-link :to="'/pages/homework/'+course_id">课程作业</router-link></li>
-    <li class="active">创建作业</li>
-</ol>
-</div>
+
 <div style="border: 1px solid; height: 500px;">
 	<div style="margin-top: 10px; margin-left: 10px;">
 		<p class="text-left" style="float: left;">作业标题: </p> <input style="margin-right: 35px; margin-left: 10px; width: 200px;float: left;" v-model="homework.name">
@@ -28,12 +22,12 @@
 		<p class="text-left" style="float: left;">同伴互评准则: </p> <textarea v-model="homework.requirement" style="margin-left: 0px;margin-right: 250px;width: 500px; height: 100px;"></textarea>
 	</div>
 	<br>
-	<div style="float: left;"><p class="text-left" style="margin-left: 10px;">同伴互评的评估维度:</p></div>
+	<div style="float: left;"><p class="text-left" style="margin-left: 10px;">同伴互评的评估维度:</p><input v-model="homework.standard[0]" style="width: 130px; margin-left: 10px;"></div>
 	<div style="float: left;" v-for="number in sum">
-			&nbsp&nbsp<input v-model="homework.standard[number]" style="width: 130px;">
-		</div>
-		<div style="margin-left: 0px;width: 90px; float: left;"><img :src="addPic" @click="addSum()">&nbsp<img :src="delPic" @click="delSum()">
-		</div>
+      &nbsp&nbsp<input v-model="homework.standard[number]" style="width: 130px;">
+    </div>
+    <div style="margin-left: 0px;width: 90px; float: left;"><img :src="addPic" @click="addSum()">&nbsp<img :src="delPic" @click="delSum()">
+    </div>
 		<br><br>
 			<div>
 		<form role="form">
@@ -71,23 +65,22 @@ import store from '@/store.js'
 export default {
   data () {
     return {
-      course_id: this.$route.params.id,
-      class_id: this.$route.params.class_id,
       course: '',
       addPic: addPic,
       delPic: delPic,
       sum: 0,
-      picked: '',
-      homework: {
-        name: '',
-        submit_ddl: '',
-        assessment_ddl: '',
-        modify_ddl: '',
-        standard: [],
-        requirement: ''
-      }
+      picked: ''
+      // homework: {
+      //   name: '',
+      //   submit_ddl: '',
+      //   assessment_ddl: '',
+      //   modify_ddl: '',
+      //   requirement: '',
+      //   standard: []
+      // }
     }
   },
+  props: ['token', 'course_id', 'class_id', 'homework'],
   methods: {
     saveHomework: function () {
       store.save('homeworkElement', this.homework)
@@ -106,7 +99,7 @@ export default {
         method: 'post',
         data: {
           type: 'T3001',
-          token: '1f5be77b086bc671b321a66ae4675330',
+          token: self.token,
           name: self.homework.name,
           course_id: self.course_id,
           class_id: self.class_id,
@@ -149,7 +142,7 @@ export default {
         method: 'post',
         data: {
           type: 'S2003',
-          token: '1f5be77b086bc671b321a66ae4675330',
+          token: self.token,
           course_id: self.course_id
         },
         transformRequest: [function (data) {
@@ -174,7 +167,8 @@ export default {
   created () {
     this.getCourseData()
     console.log('class_id----------->', this.class_id)
-    this.homework = store.fetch('homeworkElement')
+    // this.homework = self.homework
+    console.log('fix')
   }
 }
 </script>

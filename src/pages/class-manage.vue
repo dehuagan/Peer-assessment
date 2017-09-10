@@ -1,6 +1,15 @@
 <template>
+
 <div>
- <div>
+<div>
+    <topbar :user="user"></topbar>
+    <div class="appnav">
+      
+      <navigatior></navigatior>
+      </div>
+      </div>
+ <div style="width: 950px; margin-left: 250px;">
+ <div v-if="status === 1">
 	<div style="width: 950px;">
 	<h4>我的开设课程</h4>
 	<div data-spy="scroll" data-target="#navbar-example" data-offset="0" 
@@ -22,31 +31,54 @@
 			<td>{{course.grade}}</td>
 			<td>{{course.state}}</td>
 			<td>{{ course.start_day }}</td>
-			<td><router-link :to="'/pages/classDetail/'+course.id" class="btn btn-default"> 查看</router-link>&nbsp&nbsp&nbsp<button type="button" class="btn btn-danger" @click="delCourse($index)">删除</button></td>
+			<td><button class="btn btn-default" @click="check(course.id)"> 查看</button>&nbsp&nbsp&nbsp<button type="button" class="btn btn-danger" @click="delCourse($index)">删除</button></td>
 		</tr>
 		<tr v-if="notLauCourses != ''">
 			<td>{{notLauCourses.name}}</td>
 			<td>{{notLauCourses.grade}}</td>
 			<td>{{notLauCourses.state}}</td>
 			<td>{{ notLauCourses.startday }}</td>
-			<td><router-link to="/pages/fixCourse" class="btn btn-warning">修改</router-link> &nbsp&nbsp&nbsp<button type="button" class="btn btn-success" @click="launch()">发布</button> &nbsp&nbsp&nbsp<button type="button" class="btn btn-danger" @click="delprecourse()">删除</button></td>
+			<td><button @click="status = 4" class="btn btn-warning">修改</button> &nbsp&nbsp&nbsp<button type="button" class="btn btn-success" @click="launch()">发布</button> &nbsp&nbsp&nbsp<button type="button" class="btn btn-danger" @click="delprecourse()">删除</button></td>
 		</tr>
 		</tbody>
 		</table></div>
 	</div>
-	</div>
-	<br><br><br>
+		<br><br><br>
+	<div>
 	<div v-if="notLauCourses ==''">
-	<router-link to="/pages/createCourse" class="btn btn-default" style="width: 300px;">创建课程</router-link>
+	<button class="btn btn-default" style="width: 300px;" @click="status =  3">创建课程</button>
 	</div>
 	<div v-else>
 		 <button type="button" style="width: 300px;" class="btn btn-default btn-lg" disabled="disabled">创建课程</button>
 		 <p style="color: red;">您有课程还没发布，请先发布课程再创建新课程</p>
 	</div>
 	</div>
+	</div>
+	<div v-if="status === 2">
+	  <button class="btn btn-default" style="margin-right: 980px; margin-top: 5px; " @click="status = 1">返回</button>
+	<classDetail :course_id="course_id" :token="user.token"></classDetail>
+		
+	</div>
+	<div v-if="status === 3">
+	<button class="btn btn-default" style="margin-right: 980px; margin-top: 5px; " @click="status = 1">返回</button>
+		<createCourse></createCourse>
+
+	</div>
+	<div v-if="status === 4">
+	<button class="btn btn-default" style="margin-right: 980px; margin-top: 5px; " @click="status = 1">返回</button>
+		<fixCourse></fixCourse>
+
+	</div>
+	</div>
+	</div>
 </template>
 
 <script type="text/javascript">
+import topbar from '@/components/topbar'
+import navigatior from '@/components/navigatior'
+import classDetail from '@/components/classDetail'
+import createCourse from '@/components/createCourse'
+import fixCourse from '@/components/fixCourse'
 import axios from 'axios'
 import store from '@/store.js'
 export default {
@@ -56,10 +88,21 @@ export default {
       // fixid: 0,
       // creid: 1,
       notLauCourses: {},
-      newClass: []
+      newClass: [],
+      user: {},
+      course_id: '',
+      status: 1
     }
   },
+  components: {
+    topbar, navigatior, classDetail, createCourse, fixCourse
+  },
+  props: ['token'],
   methods: {
+    check: function (courseid) {
+      this.course_id = courseid
+      this.status = 2
+    },
     delCourse: function (index) {
       this.courses.splice(index, 1)
     },
@@ -76,7 +119,7 @@ export default {
         method: 'post',
         data: {
           type: 'T2001',
-          token: '1f5be77b086bc671b321a66ae4675330',
+          token: self.token,
           name: self.notLauCourses.name,
           grade: self.notLauCourses.grade,
           description: self.notLauCourses.description,
@@ -121,7 +164,7 @@ export default {
         method: 'post',
         data: {
           type: 'T2002',
-          token: '1f5be77b086bc671b321a66ae4675330'
+          token: self.token
         },
         transformRequest: [function (data) {
     // Do whatever you want to transform the data
@@ -153,6 +196,7 @@ export default {
   created () {
     this.getAllCourse()
     this.notLauCourses = this.getNotLaunchedCourse()
+    this.user = store.fetch('user')
   }
 }
 </script>

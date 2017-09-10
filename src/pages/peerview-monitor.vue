@@ -1,8 +1,14 @@
 <template>
   <div id="peer">
-  
+  <div>
+    <topbar :user="user"></topbar>
+    <div class="appnav">
+      
+      <navigatior></navigatior>
+      </div>
+      </div>
 <!--     <div class="classnav table-responsive"> -->
-     
+     <div style="height: 60px; margin-top: 10px; margin-left: 230px;">
     	<ul class="nav nav-pills">
       <li :class="{'active': index == 0}" v-for="(item,index) in items">
       <a href="" data-toggle="tab" @click="changeTab(item.id)">
@@ -10,16 +16,17 @@
   </li>
   
 </ul>
-
+</div>
   
    <!--  </div> -->
    
    
   <!-- ************************************************************************** -->
-   <div style="margin-top: 10px;">
+  <div v-if="status === 1">
+   <div style="margin-top: 10px; margin-left: 230px;">
   <div data-spy="scroll" data-target="#navbar-example" data-offset="0" 
-   style="height:500px;overflow-x:hidden; position: relative;">
-  <div v-for="aclass in classes" class="panel panel-default" style="width: 1000px;">
+   style="height:600px;overflow-x:hidden; position: relative;">
+  <div v-for="aclass in classes" class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">
       {{aclass.class_name}}作业列表
@@ -57,20 +64,40 @@
 
 </div>
 </div>
+</div>
+<div v-if="status === 2">
+<p class="text-right"><img  :src="backPic" @click="status = 1"></p>
+  <monitor :token="token" :homework_id="homework_id"></monitor>
+</div>
   </div>
 </template>
 
 <script type="text/javascript">
+import backPic from '@/assets/Back.png'
 import axios from 'axios'
 import store from '@/store.js'
+import topbar from '@/components/topbar'
+import navigatior from '@/components/navigatior'
+import monitor from '@/components/monitor'
 export default {
   data () {
     return {
+      backPic: backPic,
       items: [],
       classes: [],
-      storeData: []
+      storeData: [],
+      user: {},
+      status: 1,
+      // course_id: '',
+      // class_id: '',
+      homework_id: ''
+      // homework_name: ''
     }
   },
+  components: {
+    topbar, navigatior, monitor
+  },
+  props: ['token'],
   methods: {
     showDeatail: function (courseid, classid, id, name) {
       console.log('class_name&id------->', classid, id)
@@ -79,7 +106,8 @@ export default {
       this.storeData.push(name)
       store.save('storeData', this.storeData)
       this.storeData = []
-      this.$router.push('/pages/monitor/' + id)
+      this.status = 2
+      this.homework_id = id
     },
     getHomeworkData: function (id) {
       let self = this
@@ -88,7 +116,7 @@ export default {
         method: 'post',
         data: {
           type: 'T3003',
-          token: '1f5be77b086bc671b321a66ae4675330',
+          token: self.token,
           course_id: id
         },
         transformRequest: [function (data) {
@@ -116,7 +144,7 @@ export default {
         method: 'post',
         data: {
           type: 'T2002',
-          token: '1f5be77b086bc671b321a66ae4675330'
+          token: self.token
         },
         transformRequest: [function (data) {
     // Do whatever you want to transform the data
@@ -145,6 +173,7 @@ export default {
   created () {
     this.getData()
     this.changeTab(1)
+    this.user = store.fetch('user')
   }
 }
 </script>

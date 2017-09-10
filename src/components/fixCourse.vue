@@ -1,14 +1,7 @@
 <template>
 <div>
-<div style="margin-right: 800px; float: left;">
-	<ol class="breadcrumb">
-    <li><router-link to="/pages/class-manage">课程管理</router-link></li>
-    <li class="active">创建课程</li>
-</ol>
-</div>
-<div class="text-right" style="float: left;"><img :src="backPic" onclick="window.history.go(-1)"></div>
 <div style="width: 900px;">
-	<h3 style="text-align: center;">课程简介</h3>
+	<h3 style="text-align: center;">修改课程</h3>
 	<div style="width: 400px; float: left;">
 		<p class="text-left" style="float: left;">课程名: </p> <input style="margin-right: 35px; margin-left: 10px; width: 200px;float: left;" v-model="course.name">
 	</div>
@@ -97,7 +90,7 @@ export default {
     },
     saveCourse: function () {
       store.save('courseElement', this.course)
-      this.$router.push({path: '/pages/class-manage'})
+      alert('保存成功')
     },
     getStoreData: function () {
       return (store.fetch('courseElement'))
@@ -105,7 +98,8 @@ export default {
   },
   created () {
     // this.judge
-    console.log('%%%%%------->createCourse')
+    console.log('%%%%%------->fixCourse')
+    this.course = store.fetch('courseElement')
   }
 }
 </script>

@@ -40,8 +40,8 @@ export default {
 	padding: 0px 0px 15px;	
 	text-align: center;
 	color: #fff;
-	margin-top: 55%;
-	width: 100%;
+	margin-top: 300px;
+	width: 1200px;
 }
 
 
@@ -50,7 +50,7 @@ export default {
 }
 
 .footer .footer-menu {
-	margin: 20px auto;
+/*	margin: 20px auto;*/
 }
 
 .site-footer-links {

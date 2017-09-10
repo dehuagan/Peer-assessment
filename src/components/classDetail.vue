@@ -1,18 +1,15 @@
 <template>
 <div>
-  <router-link to="/pages/class-manage" class="btn btn-default" style="margin-right: 900px; margin-bottom: 10px;">返回</router-link>
-
-  
-	<div>
-	<ul class="nav nav-tabs">
-	<li class="active"><router-link :to="'/pages/classDetail/'+course_id">课程大纲</router-link></li>
-	<li><router-link :to="'/pages/student-manage/'+course_id">学生管理</router-link></li>
-	<li><router-link :to="'/pages/class-resource/'+course_id">课程资源</router-link></li>
-	<li><router-link :to="'/pages/homework/'+course_id">课程作业</router-link></li>
-	<li><router-link :to="'/pages/exc-work/'+course_id">优秀作品榜</router-link></li>
+	<div style=" margin-top: 10px; height: 80px;">
+	<ul class="nav nav-tabs" style="height: 50px;">
+	<li :class="{'active': status == 1}"><a @click="status = 1">课程大纲</a></li>
+	<li :class="{'active': status == 2}"><a @click="status = 2">学生管理</a></li>
+	<li :class="{'active': status == 3}"><a @click="status = 3">课程资源</a></li>
+	<li :class="{'active': status == 4}"><a @click="status = 4">课程作业</a></li>
+	<li :class="{'active': status == 5}"><a @click="status = 5">优秀作品榜</a></li>
 	</ul>
   </div>
-  <div class="detail" style="margin-top: 20px; width: 900px;">
+  <div v-if="status === 1" class="detail" style=" width: 900px;">
   <ul class="list-unstyled">
   <li><h4 class="text-left">课程名: <small>{{items.name}}</small></h4></li>
   <li><h4 class="text-left">课程介绍: <small>{{items.description}}</small></h4></li>
@@ -22,17 +19,41 @@
   <li><h4 class="text-left">教学目标: <small>{{items.aim}}</small></h4></li>
   </ul>
   </div>
+  <div v-if="status === 2">
+    <studentManage :course_id="course_id" :token="user.token"></studentManage>
+  </div>
+  <div v-if="status === 3">
+    <classResource :course_id="course_id"></classResource>
+  </div>
+    <div v-if="status === 4">
+    <homework :course_id="course_id" :token="user.token"></homework>
+  </div>
+  
+    <div v-if="status === 5">
+    <excWork :course_id="course_id"></excWork>
+  </div>
 </div>
+
 </template>
 <script type="text/javascript">
+import studentManage from '@/components/student-manage'
+import classResource from '@/components/class-resource'
+import homework from '@/components/homework'
+import excWork from '@/components/exc-work'
+import store from '@/store.js'
 import axios from 'axios'
 export default {
   data () {
     return {
-      course_id: this.$route.params.id,
       items: [],
-      classes: []
+      classes: [],
+      user: {},
+      status: 1
     }
+  },
+  props: ['token', 'course_id'],
+  components: {
+    studentManage, classResource, homework, excWork
   },
   methods: {
     getData: function () {
@@ -42,7 +63,7 @@ export default {
         method: 'post',
         data: {
           type: 'S2003',
-          token: '1f5be77b086bc671b321a66ae4675330',
+          token: self.token,
           course_id: self.course_id
         },
         transformRequest: [function (data) {
@@ -70,6 +91,7 @@ export default {
   },
   created () {
     this.getData()
+    this.user = store.fetch('user')
   }
 }
 </script>

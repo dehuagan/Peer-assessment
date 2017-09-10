@@ -1,15 +1,6 @@
 <template>
 <div>
-<router-link to="/pages/class-manage" class="btn btn-default" style="height: 35px; margin-right: 900px; margin-bottom: 10px;">返回</router-link>
-	<div>
-	<ul class="nav nav-tabs">
-	<li><router-link :to="'/pages/classDetail/'+course_id">课程大纲</router-link></li>
-	<li class="active"><router-link :to="'/pages/student-manage/'+course_id">学生管理</router-link></li>
-	<li><router-link :to="'/pages/class-resource/'+course_id">课程资源</router-link></li>
-	<li><router-link :to="'/pages/homework/'+course_id">课程作业</router-link></li>
-	<li><router-link :to="'/pages/exc-work/'+course_id">优秀作品榜</router-link></li>
-	</ul>
-  </div>
+<div v-if="status === 1">
   <div class="progress">
 	<div class="progress-bar progress-bar-success" role="progressbar"
 		 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
@@ -28,7 +19,7 @@
 	</div> -->
 </div>
 <div  data-spy="scroll" data-target="#navbar-example" data-offset="0" style="height: 450px; overflow-x:hidden; position: relative; margin-top: 0px;">
-<div class="panel panel-default" style="width: 1000px;">
+<div class="panel panel-default" >
 <p class="text-left text-justify">分组设置选项卡<br>说明:<br>随机划分：系统根据要求，在当前班级下随机抽取学生划分成一组，按照设置要求，划分结果是每组人数达到基本一致。如果出现多余的，则采用可多不可少的原则分配。<br>教师划分：由老师根据自己的想法，点击若干学生划分成组。<br>自主划分：由学生自主划分小组。<br>系统划分：根据学生注册时填写的学习风格测试问卷和添加课程时填写的预测考试问卷，寻找出学生彼此最
         适合的搭档。<br><br>
         <table class="table table-bordered">
@@ -102,7 +93,7 @@
 		</h3>
 	</div>
 	<div class="panel-body" v-if="picked === '1'+aclass.class_id">
-		<p>组数: <input type="" name=""> &nbsp&nbsp<button>确定</button></p>
+		<p><button @click="upload(1,aclass.class_id,$event)">确定</button></p>
 	</div>
 	<div class="panel-body" v-if="picked === '2'+aclass.class_id">
 		<p>分组将由系统划分，请按<button @click="upload(2,aclass.class_id,$event)">确定</button></p>
@@ -139,11 +130,17 @@
 </div>
 </div>
 </div>
-<div v-if="picked === 0">
+</div>
+<div v-if="status === 2">
+  <groupList></groupList>
+</div>
+<div v-if="status === 1">
+<div v-if="picked === 0" style="margin-top: 30px;">
 	<button class="btn btn-default" @click="saveGroup()">确定分组名单</button>
 </div>
-<div v-else><!--  -->
+<div v-else style="margin-top: 30px;"><!--  -->
 	<button class="btn btn-default" @click="getAllGroup(classes)">生成分组名单</button>
+</div>
 </div>
 	</div>
 </template>
@@ -151,10 +148,10 @@
 <script type="text/javascript">
 import axios from 'axios'
 import store from '@/store.js'
+import groupList from '@/components/groupList'
 export default {
   data () {
     return {
-      course_id: this.$route.params.id,
       classes: [],
       picked: '',
       checkedNames: [],
@@ -162,14 +159,19 @@ export default {
       file: '',
       choseArr: [],
       a: 0,
-      groupData: []
+      groupData: [],
+      status: 1
     }
   },
+  components: {
+    groupList
+  },
+  props: ['token', 'course_id'],
   methods: {
     saveGroup: function () {
       console.log('#####this is save group########')
       store.save('groupMsg', this.groupData)
-      this.$router.push('/pages/groupList/' + this.course_id)
+      this.status = 2
     },
     getFile: function (event) {
       this.file = event.target.files[0]
@@ -184,7 +186,7 @@ export default {
         data: {
           class_id: id,
           type: 'T2005',
-          token: '1f5be77b086bc671b321a66ae4675330'
+          token: self.token
         },
         transformRequest: [function (data) {
     // Do whatever you want to transform the data
@@ -222,7 +224,7 @@ export default {
       formData.append('groupingtype', grouptype)
       formData.append('class_id', id)
       formData.append('type', 'T2004')
-      formData.append('token', '1f5be77b086bc671b321a66ae4675330')
+      formData.append('token', self.token)
       formData.append('file', self.file)
       axios({
         url: 'https://diningx.cn/pa/public/api/teacher/grouping',
@@ -253,7 +255,7 @@ export default {
         method: 'post',
         data: {
           type: 'T2003',
-          token: '1f5be77b086bc671b321a66ae4675330',
+          token: self.token,
           course_id: self.course_id
         },
         transformRequest: [function (data) {

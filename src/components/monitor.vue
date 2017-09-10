@@ -1,20 +1,21 @@
 <template>
-<div style="width: 1000px;">
-<div style="width: 100%;">
+<div style="width: 1200px;">
+<div>
 	<div style="float: left;">
 	<ol class="breadcrumb">
-    <li>{{courseData.name}}</li>
     <li v-for="aclass in courseData.classes"><a v-if="aclass.id === generalData[1]">{{aclass.class_name}}</a></li>
     <li class="active">{{generalData[2]}}</li>
 </ol>
 </div>
-<p class="text-right"><img  :src="backPic" onclick="window.history.go(-1)"></p>
 </div>
-<br>
+<br><br><br>
 <!--*********************************************************************************-->
-   <div v-if="judge === 0">
+   
 <myprogress :homework_info="homework_info"></myprogress>
+<div v-if="homework_info.state === 1" style="width: 1000px; margin-left: 200px;">
+<div v-if="judge === 0">
 <p class="text-right"><button class="btn btn-default" @click="judge = 3">查看作业要求</button></p>
+
    <h4>提交名单</h4>
    <div data-spy="scroll" data-target="#navbar-example" data-offset="0" 
    style="height:90%;overflow-x:hidden; position: relative;">
@@ -49,6 +50,36 @@
    	<p class="text-left"><button class="btn btn-default" @click="judge = 0" style="margin-right: 900px;">返回</button></p>
     <homeworkRequire :homework_info="homework_info"></homeworkRequire>
    </div>
+   </div>
+   <!--*************************************************************-->
+   <div v-if="homework_info.state === 2">
+   	<h4>已提交评价的学生名单</h4>
+   	  <div data-spy="scroll" data-target="#navbar-example" data-offset="0" 
+   style="height:90%;overflow-x:hidden; position: relative;">
+     <table style="width: 100%;" class="table table-bordered">
+    <thead>
+    <tr>
+      <th>编号</th>
+      <th>学号</th>
+      <th>姓名</th>
+      <th>提交时间</th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr v-for="comment in student_comment">
+  	<td>{{comment.student_id}}</td>
+  	<td>{{comment.school_num}}</td>
+  	<td>{{comment.name}}</td>
+  	<td>{{comment.creat_time}}</td>
+  </tr>
+  </tbody>
+  </table>
+   </div>
+   </div>
+    <!--*************************************************************-->
+    <div v-if="homework_info.state === 4">
+    	{{result}}
+    </div>
 </div>	
 </template>
 <script type="text/javascript">
@@ -61,12 +92,14 @@ import homeworkRequire from '@/components/homeworkRequire'
 export default {
   data () {
     return {
-      homework_id: this.$route.params.homework_id,
       backPic: backPic,
+      state: '',
       generalData: [],
       courseData: {},
+      student_comment: [],
       students: [],
       judge: 0,
+      result: {},
       homework_info: {},
       oneStudent: {
         school_num: '',
@@ -74,12 +107,41 @@ export default {
       }
     }
   },
+  props: ['token', 'homework_id'],
   components: {
     homeworkDetail,
     myprogress,
     homeworkRequire
   },
   methods: {
+    getStudentComment: function () {
+      let self = this
+      axios({
+        url: 'https://diningx.cn/pa/public/api/teacher/get_submit_assessment_student',
+        method: 'post',
+        data: {
+          type: 'T3006',
+          token: self.token,
+          homework_id: self.homework_id
+        },
+        transformRequest: [function (data) {
+    // Do whatever you want to transform the data
+          let ret = ''
+          for (let it in data) {
+            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+          }
+          return ret
+        }],
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).then(function (res) {
+        self.student_comment = res.data.msg
+        console.log('学生评论-------------->', self.student_comment)
+      }).catch(function (err) {
+        console.log(err)
+      })
+    },
     getHomeworkInfo: function () {
       let self = this
       axios({
@@ -87,7 +149,7 @@ export default {
         method: 'post',
         data: {
           type: 'S3008',
-          token: '1f5be77b086bc671b321a66ae4675330',
+          token: self.token,
           homework_id: self.homework_id
         },
         transformRequest: [function (data) {
@@ -104,6 +166,7 @@ export default {
       }).then(function (res) {
         self.homework_info = res.data.msg
         store.save('homework_info', self.homework_info)
+        self.state = self.homework_info.state
         console.log('homework_info----------->', self.homework_info)
       }).catch(function (err) {
         console.log(err)
@@ -121,7 +184,7 @@ export default {
         method: 'post',
         data: {
           type: 'S2003',
-          token: '1f5be77b086bc671b321a66ae4675330',
+          token: self.token,
           course_id: self.generalData[0]
         },
         transformRequest: [function (data) {
@@ -148,7 +211,7 @@ export default {
         method: 'post',
         data: {
           type: 'T3005',
-          token: '1f5be77b086bc671b321a66ae4675330',
+          token: self.token,
           homework_id: self.homework_id
         },
         transformRequest: [function (data) {
@@ -168,12 +231,54 @@ export default {
       }).catch(function (err) {
         console.log(err)
       })
+    },
+    getResult: function () {
+      let self = this
+      axios({
+        url: 'https://diningx.cn/pa/public/api/student/get_homework_class_result',
+        method: 'post',
+        data: {
+          type: 'S3012',
+          token: self.token,
+          homework_id: self.homework_id
+        },
+        transformRequest: [function (data) {
+    // Do whatever you want to transform the data
+          let ret = ''
+          for (let it in data) {
+            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+          }
+          return ret
+        }],
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).then(function (res) {
+        self.result = res.data.msg
+        console.log('该作业班级情况-------->', self.result)
+      }).catch(function (err) {
+        console.log(err)
+      })
+    }
+  },
+  watch: {
+    state: {
+      handler: function (val, oldval) {
+        console.log('val--------->%s,    oldval------------->%s', val, oldval)
+        if (val === 1) {
+          this.getHomeworkData()
+        } else if (val === 2) {
+          this.getStudentComment()
+        } else if (val === 4) {
+          this.getResult()
+        }
+      },
+      deep: true
     }
   },
   created () {
     this.generalData = store.fetch('storeData')
     this.getCourseData()
-    this.getHomeworkData()
     this.getHomeworkInfo()
   }
 }
@@ -184,4 +289,5 @@ export default {
     content: ">";
     padding: 0 5px;
 }
+
 </style>

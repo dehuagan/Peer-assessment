@@ -1,29 +1,20 @@
 <template>
 <div>
-	<router-link to="/pages/class-manage" class="btn btn-default" style="margin-right: 900px; margin-bottom: 10px;">返回</router-link>
 
-	<div>
-	<ul class="nav nav-tabs">
-	<li><router-link :to="'/pages/classDetail/'+course_id">课程大纲</router-link></li>
-	<li><router-link :to="'/pages/student-manage/'+course_id">学生管理</router-link></li>
-	<li><router-link :to="'/pages/class-resource/'+course_id">课程资源</router-link></li>
-	<li class="active"><router-link :to="'/pages/homework/'+course_id">课程作业</router-link></li>
-	<li><router-link :to="'/pages/exc-work/'+course_id">优秀作品榜</router-link></li>
-	</ul>
-  </div>
   <!-- 分割 ************************************************************************-->
+  <div v-if="status === 1">
    <h3>{{ items.name }}作业列表</h3>
 	<div data-spy="scroll" data-target="#navbar-example" data-offset="0" 
-   style="height:400px;overflow-x:hidden; position: relative;">
-	<div v-for="aclass in classes" class="panel panel-default" style="width: 1000px;">
+   style="height:600px;overflow-x:hidden; position: relative;">
+	<div v-for="aclass in classes" class="panel panel-default">
 	<div class="panel-heading">
 		<h3 class="panel-title" style="height: 30px;">
 			{{aclass.class_name}}
-			<router-link :to="'/pages/createHomework/'+course_id +'/' + aclass.class_id" class="btn btn-default text-right" style="float: right;">创建作业</router-link>
+			<button @click="createHomework(aclass.class_id)" class="btn btn-default text-right" style="float: right;">创建作业</button>
 		</h3>
 		
 	</div>
-	<div class="panel-body">
+
 		<div data-spy="scroll" data-target="#navbar-example" data-offset="0" 
    style="height:300px;overflow:auto; position: relative;">
    	<table class="table table-bordered">
@@ -42,27 +33,64 @@
 		<td>{{homework.submit_ddl}}</td>
 		<td>{{homework.round}}</td>
 		<td>{{homework.state}}</td>
-		<td><button>查看</button>&nbsp&nbsp<button>删除</button></td>
+		<td><button class="btn btn-default">查看</button>&nbsp&nbsp<button class="btn btn-danger" @click="delHomework($index)">删除</button></td>
 	</tr>
 	</tbody>
 	</table>
    </div>
-	</div>
+
 </div>
 	</div>
+</div>
+<div v-if="status === 2">
+ <p class="text-right"><img :src="backpic" @click="status = 1"></p>
+  <createHomework :course_id="course_id" :class_id="class_id" :token="token"></createHomework>
+</div>
+<div v-if="status === 3">
+  <p class="text-right"><img :src="backpic" @click="status = 1"></p>
+  <fixHomework :course_id="course_id" :class_id="class_id" :token="token" :homework="homework"></fixHomework>
+</div>
 </div>
 </template>
 <script type="text/javascript">
 import axios from 'axios'
+import createHomework from '@/components/createHomework'
+import backpic from '@/assets/Back.png'
+import store from '@/store.js'
+import fixHomework from '@/components/fixHomework'
 export default {
   data () {
     return {
-      course_id: this.$route.params.id,
       items: [],
-      classes: []
+      classes: [],
+      status: 1,
+      class_id: '',
+      backpic: backpic,
+      homework: {}
     }
   },
+  props: ['token', 'course_id'],
+  components: {
+    createHomework, fixHomework
+  },
   methods: {
+    isEmptyObject: function (obj) {
+      for (var key in obj) {
+        return false
+      }
+      return true
+    },
+    createHomework: function (classid) {
+      this.homework = store.fetch('homeworkElement')
+      if (this.isEmptyObject(this.homework)) {
+        this.status = 2
+      } else {
+        this.status = 3
+      }
+      this.class_id = classid
+    },
+    delHomework: function (index) {
+    },
     getData: function () {
       let self = this
       axios({
@@ -70,7 +98,7 @@ export default {
         method: 'post',
         data: {
           type: 'T3003',
-          token: '1f5be77b086bc671b321a66ae4675330',
+          token: self.token,
           course_id: self.course_id
         },
         transformRequest: [function (data) {
