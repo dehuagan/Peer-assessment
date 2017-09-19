@@ -67,7 +67,7 @@
 </div>
 <div v-if="status === 2">
 <p class="text-right"><img  :src="backPic" @click="status = 1"></p>
-  <monitor :token="token" :homework_id="homework_id"></monitor>
+  <monitor :token="user.token" :homework_id="homework_id"></monitor>
 </div>
   </div>
 </template>
@@ -97,7 +97,6 @@ export default {
   components: {
     topbar, navigatior, monitor
   },
-  props: ['token'],
   methods: {
     showDeatail: function (courseid, classid, id, name) {
       console.log('class_name&id------->', classid, id)
@@ -116,7 +115,7 @@ export default {
         method: 'post',
         data: {
           type: 'T3003',
-          token: self.token,
+          token: self.user.token,
           course_id: id
         },
         transformRequest: [function (data) {
@@ -144,7 +143,7 @@ export default {
         method: 'post',
         data: {
           type: 'T2002',
-          token: self.token
+          token: self.user.token
         },
         transformRequest: [function (data) {
     // Do whatever you want to transform the data
@@ -171,9 +170,9 @@ export default {
     }
   },
   created () {
+    this.user = store.fetch('user')
     this.getData()
     this.changeTab(1)
-    this.user = store.fetch('user')
   }
 }
 </script>

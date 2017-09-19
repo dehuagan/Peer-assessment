@@ -35,14 +35,16 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 #footer{
-	position:absolute;
+	/*position:absolute;*/
 	background-color: #515151;
 	padding: 0px 0px 15px;	
 	text-align: center;
 	color: #fff;
-	margin-top: 300px;
 	width: 1200px;
+	margin-top: 500px;
+	/*margin-right: 110px;*/
 }
+
 
 
 .footer img {
@@ -50,7 +52,7 @@ export default {
 }
 
 .footer .footer-menu {
-/*	margin: 20px auto;*/
+	margin: 20px auto;
 }
 
 .site-footer-links {

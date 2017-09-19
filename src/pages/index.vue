@@ -1,10 +1,13 @@
 <template>
-	<div class="topbar">
+<div>
+	<div>
     <topbar :user="user"></topbar>
     <div class="appnav">
       
       <navigatior></navigatior>
       </div>
+      </div>
+      {{token}}
       </div>
 </template>
 <script type="text/javascript">
@@ -17,6 +20,7 @@ export default {
       user: {}
     }
   },
+  props: ['token'],
   created () {
     this.user = store.fetch('user')
   },
@@ -33,8 +37,5 @@ export default {
 
 
 }
-.topbar {
-	margin: 0 auto;
-	
-}
+
 </style>

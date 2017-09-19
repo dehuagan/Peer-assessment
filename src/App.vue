@@ -10,9 +10,7 @@
     <div class="router-view">
       <router-view :token="user.token"></router-view>
     </div>
-    <div class="foobar">
       <footbar></footbar>
-    </div>
    </div>
    <!--***********************************************************************-->
 <!-- <div v-else>
@@ -126,12 +124,7 @@ export default {
 
 }
 
-.footbar {
-/*  width: 1200px;*/
-  margin-top: 500px;
 
-
-}
 
 #app {
   width: 1200px;

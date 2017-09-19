@@ -1,7 +1,7 @@
 <template>
 <div style="width: 1200px;">
 <div>
-	<div style="float: left;">
+	<div style="float: left; margin-left: 20px;">
 	<ol class="breadcrumb">
     <li v-for="aclass in courseData.classes"><a v-if="aclass.id === generalData[1]">{{aclass.class_name}}</a></li>
     <li class="active">{{generalData[2]}}</li>
@@ -77,6 +77,50 @@
    </div>
    </div>
     <!--*************************************************************-->
+    <div v-if="homework_info.state === 3">
+    <div style="margin-left: 220px;" class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      第一轮&nbsp&nbsp&nbsp(平均分:{{result_1.avg_score}})
+    </h3>
+    
+  </div>
+    <!-- <div data-spy="scroll" data-target="#navbar-example" data-offset="0" 
+   style="overflow:auto; position: relative;"> -->
+    <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th v-for="avg in result_1.avg_star">
+        {{avg.standard_name}}:&nbsp{{avg.avg_star}}
+      </th>
+    </tr>
+  </thead>
+  </table>
+  
+   </div>
+   <br><br><br>
+   <div style="margin-left: 220px;" class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      第二轮&nbsp&nbsp&nbsp(平均分:{{result_2.avg_score}})
+    </h3>
+    
+  </div>
+    <!-- <div data-spy="scroll" data-target="#navbar-example" data-offset="0" 
+   style="overflow:auto; position: relative;"> -->
+    <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th v-for="avg in result_2.avg_star">
+        {{avg.standard_name}}:&nbsp{{avg.avg_star}}
+      </th>
+    </tr>
+  </thead>
+  </table>
+  
+   </div>
+<!-- {{result_1.avg_score}} -->
+    </div>
     <div v-if="homework_info.state === 4">
     	{{result}}
     </div>
@@ -99,7 +143,8 @@ export default {
       student_comment: [],
       students: [],
       judge: 0,
-      result: {},
+      result_1: {},
+      result_2: {},
       homework_info: {},
       oneStudent: {
         school_num: '',
@@ -254,12 +299,41 @@ export default {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       }).then(function (res) {
-        self.result = res.data.msg
-        console.log('该作业班级情况-------->', self.result)
+        self.result_1 = res.data.msg[1]
+        self.result_2 = res.data.msg[2]
+        console.log('该作业班级情况-------->', self.result_1)
       }).catch(function (err) {
         console.log(err)
       })
     }
+    // getHomeworkPerson: function () {
+    //   let self = this
+    //   axios({
+    //     url: 'https://diningx.cn/pa/public/api/student/get_homework_personal_result',
+    //     method: 'post',
+    //     data: {
+    //       type: 'S3012',
+    //       token: self.token,
+    //       homework_id: self.homework_id
+    //     },
+    //     transformRequest: [function (data) {
+    // // Do whatever you want to transform the data
+    //       let ret = ''
+    //       for (let it in data) {
+    //         ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+    //       }
+    //       return ret
+    //     }],
+    //     headers: {
+    //       'Content-Type': 'application/x-www-form-urlencoded'
+    //     }
+    //   }).then(function (res) {
+    //     self.homework_person = res.data
+    //     console.log('获取该作业的个人的情况 -------->', self.homework_person)
+    //   }).catch(function (err) {
+    //     console.log(err)
+    //   })
+    // }
   },
   watch: {
     state: {
@@ -269,7 +343,7 @@ export default {
           this.getHomeworkData()
         } else if (val === 2) {
           this.getStudentComment()
-        } else if (val === 4) {
+        } else if (val === 3 || val === 4) {
           this.getResult()
         }
       },

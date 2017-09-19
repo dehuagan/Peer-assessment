@@ -97,7 +97,6 @@ export default {
   components: {
     topbar, navigatior, classDetail, createCourse, fixCourse
   },
-  props: ['token'],
   methods: {
     check: function (courseid) {
       this.course_id = courseid
@@ -119,7 +118,7 @@ export default {
         method: 'post',
         data: {
           type: 'T2001',
-          token: self.token,
+          token: self.user.token,
           name: self.notLauCourses.name,
           grade: self.notLauCourses.grade,
           description: self.notLauCourses.description,
@@ -164,7 +163,7 @@ export default {
         method: 'post',
         data: {
           type: 'T2002',
-          token: self.token
+          token: self.user.token
         },
         transformRequest: [function (data) {
     // Do whatever you want to transform the data
@@ -194,9 +193,9 @@ export default {
     }
   },
   created () {
+    this.user = store.fetch('user')
     this.getAllCourse()
     this.notLauCourses = this.getNotLaunchedCourse()
-    this.user = store.fetch('user')
   }
 }
 </script>

@@ -3,6 +3,8 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import VueChatScroll from 'vue-chat-scroll'
+Vue.use(VueChatScroll)
 Vue.prototype.HOST = '/api'
 // import axios from 'axios'
 // Vue.prototype.$http = axios
